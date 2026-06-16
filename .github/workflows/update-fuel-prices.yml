@@ -2,8 +2,8 @@ name: Update NSW Fuel Prices
 
 on:
   schedule:
-    - cron: '0 * * * *'     # Every hour
-  workflow_dispatch:        # Allows manual runs
+    - cron: '0 * * * *'     # Every hour (UTC)
+  workflow_dispatch:        # Manual trigger
 
 permissions:
   contents: write
@@ -15,12 +15,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0     # ← Important
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      # Reset to latest first, then run the script
+      - name: Sync with latest changes
+        run: |
+          git fetch origin
+          git reset --hard origin/main
 
       - name: Fetch and save fuel prices
         env:
@@ -32,9 +38,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git fetch origin
-          git reset --hard origin/main
 
           git add data/fuel-prices.json
 
