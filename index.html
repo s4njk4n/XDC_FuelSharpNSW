@@ -358,13 +358,15 @@
             const displayCurrency = document.getElementById('displayCurrency').value;
             const visibleStations = getVisibleStations();
 
-            document.getElementById('visibleCount').textContent = `${visibleStations.length} stations visible`;
+            document.getElementById('visibleCount').textContent = 
+                `${visibleStations.length} stations visible`;
 
             if (visibleStations.length === 0) {
                 container.innerHTML = `<div class="p-6 text-center text-zinc-400">No stations visible in current map area.</div>`;
                 return;
             }
 
+            // Sort stations by effective price (cheapest first)
             const sorted = [...visibleStations].sort((a, b) => {
                 return getEffectivePrice(a, fuelType) - getEffectivePrice(b, fuelType);
             });
@@ -377,12 +379,13 @@
                 const discount = getDiscountForBrand(station.brand);
                 const cryptoValue = convertToCrypto(effectiveAUD, displayCurrency);
 
+                // Create the row element
                 const div = document.createElement('div');
                 div.className = `station-row px-5 py-4 flex justify-between items-center border-b border-zinc-800 last:border-b-0 cursor-pointer`;
-                
+
                 let priceHTML = `
                     <div class="font-mono font-semibold ${discount ? 'text-emerald-400' : 'text-white'}">
-                        ${effectiveAUD.toFixed(1)}¢
+                        ${effectiveAUD.toFixed(1)}¢ <span class="text-xs text-zinc-400">AUD</span>
                     </div>
                 `;
 
@@ -395,9 +398,7 @@
                 }
 
                 if (discount) {
-                    priceHTML += `<div class="text-[10px] text-emerald-400 line-through">${originalAUD}¢</div>`;
-                } else {
-                    priceHTML += `<div class="text-[10px] text-zinc-500">${originalAUD}¢</div>`;
+                    priceHTML += `<div class="text-[10px] text-emerald-400 line-through">${originalAUD}¢ AUD</div>`;
                 }
 
                 div.innerHTML = `
@@ -411,6 +412,7 @@
                     <div class="text-right">${priceHTML}</div>
                 `;
 
+                // Click to fly to station on map
                 div.onclick = () => {
                     map.flyTo([station.lat, station.lng], 15, { duration: 0.8 });
                 };
