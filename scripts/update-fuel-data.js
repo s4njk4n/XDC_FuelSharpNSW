@@ -28,10 +28,9 @@ async function getAccessToken() {
     const response = await fetch(
         'https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken?grant_type=client_credentials',
         {
-            method: 'POST',
+            method: 'GET',                    // ← Changed from POST to GET
             headers: {
                 'Authorization': `Basic ${basicAuth}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json'
             }
         }
@@ -53,11 +52,11 @@ async function getAccessToken() {
     try {
         const data = JSON.parse(text);
         if (!data.access_token) {
-            throw new Error('No access_token in response');
+            throw new Error('No access_token found in response');
         }
         return data.access_token;
     } catch (e) {
-        console.error('Failed to parse token response:', text);
+        console.error('Failed to parse token JSON. Raw response:', text);
         throw new Error('Token response was not valid JSON');
     }
 }
