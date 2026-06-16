@@ -284,20 +284,43 @@
             }
 
             const basicAuth = btoa(`${creds.key}:${creds.secret}`);
-            
-            // ✅ Correct endpoint
-            const apiUrl = 'https://api.onegov.nsw.gov.au/FuelPriceCheck/v1/fuel/prices';
-            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
 
             try {
+                // Step 1: Get OAuth Access Token
+                const tokenUrl = 'https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken?grant_type=client_credentials';
+                const tokenProxy = `https://corsproxy.io/?${encodeURIComponent(tokenUrl)}`;
+
+                const tokenRes = await fetch(tokenProxy, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Basic ${basicAuth}`,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+
+                if (!tokenRes.ok) {
+                    throw new Error(`Token request failed: ${tokenRes.status}`);
+                }
+
+                const tokenData = await tokenRes.json();
+                const accessToken = tokenData.access_token;
+
+                if (!accessToken) {
+                    throw new Error('No access token received');
+                }
+
+                // Step 2: Fetch fuel prices using the token
+                const apiUrl = 'https://api.onegov.nsw.gov.au/FuelPriceCheck/v1/fuel/prices';
+                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
+
                 const res = await fetch(proxyUrl, {
                     headers: {
-                        'Authorization': `Basic ${basicAuth}`
+                        'Authorization': `Bearer ${accessToken}`
                     }
                 });
 
                 if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
+                    throw new Error(`Prices request failed: ${res.status}`);
                 }
 
                 const data = await res.json();
@@ -333,6 +356,7 @@
                     updateRankedList();
                     return;
                 }
+
             } catch (error) {
                 console.error('Failed to load live data:', error);
             }
