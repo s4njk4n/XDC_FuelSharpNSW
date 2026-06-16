@@ -248,7 +248,7 @@
             try {
                 let url = './data/fuel-prices.json';
                 
-                // Add timestamp to bypass browser/GitHub cache
+                // Bypass browser cache when refreshing
                 if (forceRefresh) {
                     url += `?t=${Date.now()}`;
                 }
@@ -290,11 +290,13 @@
                         };
                     });
 
-                if (data.lastUpdated) {
-                    const date = new Date(data.lastUpdated);
-                    document.getElementById('lastUpdated').textContent = 
-                        `Updated: ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-                }
+                // Show when WE (the browser) last fetched the data
+                const now = new Date();
+                const timeString = now.toLocaleTimeString([], { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                document.getElementById('lastUpdated').textContent = `Updated: ${timeString}`;
 
                 const visibleStations = getVisibleStations();
                 addMarkers(visibleStations);
@@ -319,25 +321,15 @@
         // ==================== REFRESH PRICES ====================
         async function refreshPrices() {
             const lastUpdatedEl = document.getElementById('lastUpdated');
-            const originalText = lastUpdatedEl.textContent;
-            
             lastUpdatedEl.textContent = 'Refreshing...';
             
             try {
-                await loadFuelData(true); // true = force refresh (bypass cache)
-                
-                // Show confirmation briefly
-                lastUpdatedEl.textContent = 'Updated just now';
-                
-                setTimeout(() => {
-                    if (lastUpdatedEl.textContent === 'Updated just now') {
-                        // It will naturally update on next normal load
-                    }
-                }, 4000);
-                
+                await loadFuelData(true); // true = force fresh fetch (bypass cache)
             } catch (error) {
-                lastUpdatedEl.textContent = originalText;
-                alert('Failed to refresh prices. Please try again.');
+                lastUpdatedEl.textContent = 'Failed to refresh';
+                setTimeout(() => {
+                    lastUpdatedEl.textContent = 'Updated: --:--';
+                }, 3000);
             }
         }
 
