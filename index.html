@@ -161,29 +161,63 @@
         async function loadFuelData() {
             try {
                 const response = await fetch('./data/fuel-prices.json');
+                
                 if (!response.ok) throw new Error('Data file not found');
 
-                const rawData = await response.json();
-                
-                allStations = rawData.map((p, i) => ({
-                    id: i + 1,
-                    brand: p.brand || p.Brand || 'Unknown',
-                    name: p.siteName || p.SiteName || p.address || 'Station',
-                    lat: parseFloat(p.latitude || p.Latitude),
-                    lng: parseFloat(p.longitude || p.Longitude),
-                    prices: {
-                        U91: parseFloat(p.U91 || p.price || p.Price) || 180,
-                        E10: parseFloat(p.E10 || p.price || p.Price) || 177,
-                        Diesel: parseFloat(p.Diesel || p.price || p.Price) || 195,
-                        P95: parseFloat(p.P95 || p.price || p.Price) || 200,
-                        P98: parseFloat(p.P98 || p.price || p.Price) || 210
+                const data = await response.json();
+
+                const stationsData = data.stations || [];
+                const pricesData = data.prices || [];
+
+                // Create a map of prices by station code for fast lookup
+                const priceMap = {};
+                pricesData.forEach(p => {
+                    const code = p.stationcode || p.code || p.stationCode;
+                    if (!code) return;
+
+                    if (!priceMap[code]) priceMap[code] = {};
+
+                    const fuelType = p.fueltype || p.fuelType || p.type;
+                    const priceValue = parseFloat(p.price || p.Price);
+
+                    if (fuelType && priceValue) {
+                        priceMap[code][fuelType] = priceValue;
                     }
-                }));
+                });
 
-                document.getElementById('lastUpdated').textContent = 
-                    `Updated: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                // Build clean station objects with prices attached
+                allStations = stationsData
+                    .filter(s => s.location && s.location.latitude && s.location.longitude)
+                    .map((station, i) => {
+                        const prices = priceMap[station.code] || {};
 
-                // Initial render
+                        return {
+                            id: i + 1,
+                            brand: station.brand || 'Unknown',
+                            name: station.name || station.address || 'Station',
+                            lat: parseFloat(station.location.latitude),
+                            lng: parseFloat(station.location.longitude),
+                            prices: {
+                                U91: prices.U91 || prices['U91'] || 180,
+                                E10: prices.E10 || prices['E10'] || 177,
+                                Diesel: prices.Diesel || prices['Diesel'] || 195,
+                                P95: prices.P95 || prices['P95'] || 200,
+                                P98: prices.P98 || prices['P98'] || 210
+                            }
+                        };
+                    });
+
+                // Update last updated time
+                const lastUpdatedEl = document.getElementById('lastUpdated');
+                if (data.lastUpdated) {
+                    const date = new Date(data.lastUpdated);
+                    lastUpdatedEl.textContent = `Updated: ${date.toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    })}`;
+                }
+
+                // Render
                 const visibleStations = getVisibleStations();
                 addMarkers(visibleStations);
                 updateRankedList();
@@ -191,14 +225,14 @@
             } catch (error) {
                 console.error('Failed to load fuel data:', error);
                 document.getElementById('lastUpdated').textContent = 'Using sample data';
-                
+
                 // Fallback sample data
                 allStations = [
                     { id: 1, brand: "7-Eleven", name: "Sydney CBD", lat: -33.8688, lng: 151.2093, prices: { U91: 179.9, E10: 177.9, Diesel: 199.9, P95: 199.9, P98: 209.9 } },
                     { id: 2, brand: "Shell", name: "Parramatta", lat: -33.8151, lng: 151.0034, prices: { U91: 181.9, E10: 179.9, Diesel: 195.9, P95: 201.9, P98: 211.9 } },
                     { id: 3, brand: "BP", name: "Chatswood", lat: -33.7969, lng: 151.1833, prices: { U91: 178.9, E10: 176.9, Diesel: 194.9, P95: 198.9, P98: 208.9 } }
                 ];
-                
+
                 const visibleStations = getVisibleStations();
                 addMarkers(visibleStations);
                 updateRankedList();
