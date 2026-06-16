@@ -67,6 +67,12 @@
                         Instructions
                     </a>
 
+                    <!-- Refresh Prices Button -->
+                    <button onclick="refreshPrices()" 
+                            class="text-xs px-3 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-300 transition-colors">
+                        Refresh Prices
+                    </button>
+
                     <!-- Last Updated -->
                     <div id="lastUpdated" 
                          class="text-xs px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400">
@@ -237,10 +243,17 @@
             });
         }
 
-        // ==================== DATA LOADING ====================
-        async function loadFuelData() {
+        // ==================== DATA LOADING (with cache busting) ====================
+        async function loadFuelData(forceRefresh = false) {
             try {
-                const response = await fetch('./data/fuel-prices.json');
+                let url = './data/fuel-prices.json';
+                
+                // Add timestamp to bypass browser/GitHub cache
+                if (forceRefresh) {
+                    url += `?t=${Date.now()}`;
+                }
+
+                const response = await fetch(url);
                 if (!response.ok) throw new Error('Data file not found');
 
                 const data = await response.json();
@@ -300,6 +313,31 @@
                 const visibleStations = getVisibleStations();
                 addMarkers(visibleStations);
                 updateRankedList();
+            }
+        }
+
+        // ==================== REFRESH PRICES ====================
+        async function refreshPrices() {
+            const lastUpdatedEl = document.getElementById('lastUpdated');
+            const originalText = lastUpdatedEl.textContent;
+            
+            lastUpdatedEl.textContent = 'Refreshing...';
+            
+            try {
+                await loadFuelData(true); // true = force refresh (bypass cache)
+                
+                // Show confirmation briefly
+                lastUpdatedEl.textContent = 'Updated just now';
+                
+                setTimeout(() => {
+                    if (lastUpdatedEl.textContent === 'Updated just now') {
+                        // It will naturally update on next normal load
+                    }
+                }, 4000);
+                
+            } catch (error) {
+                lastUpdatedEl.textContent = originalText;
+                alert('Failed to refresh prices. Please try again.');
             }
         }
 
