@@ -2,8 +2,11 @@ name: Update NSW Fuel Prices
 
 on:
   schedule:
-    - cron: '0 * * * *'   # Runs every hour
-  workflow_dispatch:      # Allows manual trigger
+    - cron: '0 * * * *'     # Every hour
+  workflow_dispatch:        # Manual trigger
+
+permissions:
+  contents: write           # ← This is required to push changes
 
 jobs:
   update-prices:
