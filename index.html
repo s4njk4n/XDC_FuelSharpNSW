@@ -47,7 +47,18 @@
             </div>
         </div>
 
-
+        <!-- Fuel Type Selector -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-zinc-400 mb-1.5">Fuel Type</label>
+            <select id="fuelType" onchange="updateRankedList()"
+                    class="w-full md:w-64 bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-3 text-sm">
+                <option value="U91">U91 (Unleaded 91)</option>
+                <option value="E10">E10</option>
+                <option value="Diesel">Diesel</option>
+                <option value="P95">P95</option>
+                <option value="P98">P98</option>
+            </select>
+        </div>
 
         <!-- Map -->
         <div class="mb-6">
@@ -59,7 +70,7 @@
         </div>
 
         <!-- Ranked List -->
-        <div>
+        <div class="mb-8">
             <div class="flex items-center justify-between mb-3 px-1">
                 <div class="font-semibold">Cheapest Stations (Visible on Map)</div>
                 <button onclick="updateRankedList()" 
@@ -75,27 +86,13 @@
         </div>
 
         <!-- Discount Settings -->
-        <div>
-        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5 mb-6">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
             <h3 class="font-semibold mb-4 flex items-center gap-2">
                 <span>💰</span> 
                 <span>Your Discounts</span>
             </h3>
         
-           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Fuel Type -->
-                <div>
-                    <label class="block text-xs font-medium text-zinc-400 mb-1.5">Fuel Type</label>
-                    <select id="fuelType" onchange="updateRankedList()"
-                            class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm">
-                        <option value="U91">U91 (Unleaded 91)</option>
-                        <option value="E10">E10</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="P95">P95</option>
-                        <option value="P98">P98</option>
-                    </select>
-                </div>
-        
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Brand -->
                 <div>
                     <label class="block text-xs font-medium text-zinc-400 mb-1.5">Brand</label>
@@ -111,7 +108,7 @@
                            class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm">
                 </div>
         
-               <!-- Custom Label -->
+                <!-- Custom Label -->
                 <div>
                     <label class="block text-xs font-medium text-zinc-400 mb-1.5">Label (optional)</label>
                     <input id="discountLabel" type="text" placeholder="e.g. NRMA, Work card"
@@ -132,7 +129,6 @@
                 </div>
             </div>
         </div>
-        </div>
         
         <div class="text-center text-xs text-zinc-500 mt-8 pb-8">
             Data updates hourly via GitHub Actions • Prices shown include your selected discounts
@@ -146,7 +142,7 @@
         let allStations = [];
         let map;
         let markers = [];
-        let currentDiscount = { brand: '', amount: 0 };
+        let savedDiscounts = [];
 
         // ==================== MAP ====================
         function initMap() {
@@ -157,7 +153,6 @@
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-            // Update list when map moves or zooms
             map.on('moveend', updateRankedList);
             map.on('zoomend', updateRankedList);
         }
@@ -176,36 +171,26 @@
         async function loadFuelData() {
             try {
                 const response = await fetch('./data/fuel-prices.json');
-                
                 if (!response.ok) throw new Error('Data file not found');
 
                 const data = await response.json();
-
                 const stationsData = data.stations || [];
                 const pricesData = data.prices || [];
 
-                // Create a map of prices by station code for fast lookup
                 const priceMap = {};
                 pricesData.forEach(p => {
                     const code = p.stationcode || p.code || p.stationCode;
                     if (!code) return;
-
                     if (!priceMap[code]) priceMap[code] = {};
-
                     const fuelType = p.fueltype || p.fuelType || p.type;
                     const priceValue = parseFloat(p.price || p.Price);
-
-                    if (fuelType && priceValue) {
-                        priceMap[code][fuelType] = priceValue;
-                    }
+                    if (fuelType && priceValue) priceMap[code][fuelType] = priceValue;
                 });
 
-                // Build clean station objects with prices attached
                 allStations = stationsData
                     .filter(s => s.location && s.location.latitude && s.location.longitude)
                     .map((station, i) => {
                         const prices = priceMap[station.code] || {};
-
                         return {
                             id: i + 1,
                             brand: station.brand || 'Unknown',
@@ -222,17 +207,12 @@
                         };
                     });
 
-                // Update last updated time
                 const lastUpdatedEl = document.getElementById('lastUpdated');
                 if (data.lastUpdated) {
                     const date = new Date(data.lastUpdated);
-                    lastUpdatedEl.textContent = `Updated: ${date.toLocaleTimeString([], { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                    })}`;
+                    lastUpdatedEl.textContent = `Updated: ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
                 }
 
-                // Render
                 const visibleStations = getVisibleStations();
                 addMarkers(visibleStations);
                 updateRankedList();
@@ -240,14 +220,11 @@
             } catch (error) {
                 console.error('Failed to load fuel data:', error);
                 document.getElementById('lastUpdated').textContent = 'Using sample data';
-
-                // Fallback sample data
                 allStations = [
                     { id: 1, brand: "7-Eleven", name: "Sydney CBD", lat: -33.8688, lng: 151.2093, prices: { U91: 179.9, E10: 177.9, Diesel: 199.9, P95: 199.9, P98: 209.9 } },
                     { id: 2, brand: "Shell", name: "Parramatta", lat: -33.8151, lng: 151.0034, prices: { U91: 181.9, E10: 179.9, Diesel: 195.9, P95: 201.9, P98: 211.9 } },
                     { id: 3, brand: "BP", name: "Chatswood", lat: -33.7969, lng: 151.1833, prices: { U91: 178.9, E10: 176.9, Diesel: 194.9, P95: 198.9, P98: 208.9 } }
                 ];
-
                 const visibleStations = getVisibleStations();
                 addMarkers(visibleStations);
                 updateRankedList();
@@ -255,119 +232,94 @@
         }
 
         // ==================== DISCOUNT MANAGEMENT ====================
-        let savedDiscounts = [];
-
         function loadSavedDiscounts() {
-                const saved = localStorage.getItem('fuelDiscounts');
-                savedDiscounts = saved ? JSON.parse(saved) : [];
-                renderSavedDiscounts();
+            const saved = localStorage.getItem('fuelDiscounts');
+            savedDiscounts = saved ? JSON.parse(saved) : [];
+            renderSavedDiscounts();
         }
 
         function saveDiscount() {
-                const brand = document.getElementById('discountBrand').value;
-                const amount = parseFloat(document.getElementById('discountAmount').value);
-                const label = document.getElementById('discountLabel').value.trim();
+            const brand = document.getElementById('discountBrand').value;
+            const amount = parseFloat(document.getElementById('discountAmount').value);
+            const label = document.getElementById('discountLabel').value.trim();
 
-                if (!brand || !amount || amount <= 0) {
-                        alert("Please select a brand and enter a valid discount amount.");
-                        return;
-                }
+            if (!brand || !amount || amount <= 0) {
+                alert("Please select a brand and enter a valid discount amount.");
+                return;
+            }
 
-                // Remove existing discount for this brand (update instead of duplicate)
-                savedDiscounts = savedDiscounts.filter(d => d.brand !== brand);
-
-                savedDiscounts.push({
-                        brand: brand,
-                        amount: amount,
-                        label: label || brand
-                });
-
-                localStorage.setItem('fuelDiscounts', JSON.stringify(savedDiscounts));
-                renderSavedDiscounts();
-                updateRankedList();
-
-                // Clear form
-                document.getElementById('discountAmount').value = '5';
-                document.getElementById('discountLabel').value = '';
+            savedDiscounts = savedDiscounts.filter(d => d.brand !== brand);
+            savedDiscounts.push({ brand, amount, label: label || brand });
+            localStorage.setItem('fuelDiscounts', JSON.stringify(savedDiscounts));
+            renderSavedDiscounts();
+            updateRankedList();
         }
 
         function deleteDiscount(brand) {
-                savedDiscounts = savedDiscounts.filter(d => d.brand !== brand);
-                localStorage.setItem('fuelDiscounts', JSON.stringify(savedDiscounts));
-                renderSavedDiscounts();
-                updateRankedList();
+            savedDiscounts = savedDiscounts.filter(d => d.brand !== brand);
+            localStorage.setItem('fuelDiscounts', JSON.stringify(savedDiscounts));
+            renderSavedDiscounts();
+            updateRankedList();
         }
 
         function renderSavedDiscounts() {
-                const container = document.getElementById('savedDiscountsList');
-                container.innerHTML = '';
+            const container = document.getElementById('savedDiscountsList');
+            container.innerHTML = '';
 
-                if (savedDiscounts.length === 0) {
-                        container.innerHTML = `<div class="text-xs text-zinc-500 px-2">No discounts saved yet.</div>`;
-                        return;
-                }
+            if (savedDiscounts.length === 0) {
+                container.innerHTML = `<div class="text-xs text-zinc-500 px-2">No discounts saved yet.</div>`;
+                return;
+            }
 
-                savedDiscounts.forEach(discount => {
-                        const div = document.createElement('div');
-                        div.className = `flex justify-between items-center bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-2 text-sm`;
-
-                        div.innerHTML = `
-                                <div>
-                                        <span class="font-medium">${discount.brand}</span>
-                                        <span class="text-emerald-400 ml-2">−${discount.amount}¢</span>
-                                        ${discount.label !== discount.brand ? 
-                                                `<span class="text-xs text-zinc-400 ml-2">(${discount.label})</span>` : ''}
-                                </div>
-                                <button onclick="deleteDiscount('${discount.brand}')" 
-                                        class="text-red-400 hover:text-red-500 text-xs px-3 py-1">Remove</button>
-                        `;
-                        container.appendChild(div);
-                });
+            savedDiscounts.forEach(discount => {
+                const div = document.createElement('div');
+                div.className = `flex justify-between items-center bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-2 text-sm`;
+                div.innerHTML = `
+                    <div>
+                        <span class="font-medium">${discount.brand}</span>
+                        <span class="text-emerald-400 ml-2">−${discount.amount}¢</span>
+                        ${discount.label !== discount.brand ? `<span class="text-xs text-zinc-400 ml-2">(${discount.label})</span>` : ''}
+                    </div>
+                    <button onclick="deleteDiscount('${discount.brand}')" class="text-red-400 hover:text-red-500 text-xs px-3 py-1">Remove</button>
+                `;
+                container.appendChild(div);
+            });
         }
 
         function getDiscountForBrand(brand) {
-                return savedDiscounts.find(d => d.brand === brand);
+            return savedDiscounts.find(d => d.brand === brand);
         }
 
         function getEffectivePrice(station, fuelType) {
-                const basePrice = station.prices[fuelType] || 180;
-                const discount = getDiscountForBrand(station.brand);
-
-                if (discount) {
-                        return Math.max(basePrice - discount.amount, 0);
-                }
-                return basePrice;
+            const basePrice = station.prices[fuelType] || 180;
+            const discount = getDiscountForBrand(station.brand);
+            return discount ? Math.max(basePrice - discount.amount, 0) : basePrice;
         }
 
         // ==================== DYNAMIC BRAND DROPDOWN ====================
         function populateBrandDropdown() {
-                const select = document.getElementById('discountBrand');
-                const visibleStations = getVisibleStations();
+            const select = document.getElementById('discountBrand');
+            const visibleStations = getVisibleStations();
+            const brands = [...new Set(visibleStations.map(s => s.brand))].sort();
 
-                const brands = [...new Set(visibleStations.map(s => s.brand))].sort();
-
-                select.innerHTML = '<option value="">Select brand...</option>';
-
-                brands.forEach(brand => {
-                        const option = document.createElement('option');
-                        option.value = brand;
-                        option.textContent = brand;
-                        select.appendChild(option);
-                });
+            select.innerHTML = '<option value="">Select brand...</option>';
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                select.appendChild(option);
+            });
         }
 
         function updateDiscountUI() {
-                populateBrandDropdown();
+            populateBrandDropdown();
         }
 
         // ==================== VISIBLE STATIONS ====================
         function getVisibleStations() {
             if (!map) return allStations;
-
             const bounds = map.getBounds();
-            return allStations.filter(station => 
-                bounds.contains([station.lat, station.lng])
-            );
+            return allStations.filter(station => bounds.contains([station.lat, station.lng]));
         }
 
         // ==================== RANKED LIST ====================
@@ -376,15 +328,13 @@
             const fuelType = document.getElementById('fuelType').value;
             const visibleStations = getVisibleStations();
 
-            document.getElementById('visibleCount').textContent = 
-                `${visibleStations.length} stations visible`;
+            document.getElementById('visibleCount').textContent = `${visibleStations.length} stations visible`;
 
             if (visibleStations.length === 0) {
                 container.innerHTML = `<div class="p-6 text-center text-zinc-400">No stations visible in current map area.</div>`;
                 return;
             }
 
-            // Sort by effective price
             const sorted = [...visibleStations].sort((a, b) => {
                 return getEffectivePrice(a, fuelType) - getEffectivePrice(b, fuelType);
             });
@@ -394,7 +344,7 @@
             sorted.slice(0, 20).forEach((station, index) => {
                 const effectivePrice = getEffectivePrice(station, fuelType);
                 const originalPrice = station.prices[fuelType];
-                const hasDiscount = currentDiscount.brand && station.brand === currentDiscount.brand;
+                const discount = getDiscountForBrand(station.brand);
 
                 const div = document.createElement('div');
                 div.className = `station-row px-5 py-4 flex justify-between items-center border-b border-zinc-800 last:border-b-0 cursor-pointer`;
@@ -408,10 +358,10 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="font-mono font-semibold ${hasDiscount ? 'text-emerald-400' : 'text-white'}">
+                        <div class="font-mono font-semibold ${discount ? 'text-emerald-400' : 'text-white'}">
                             ${effectivePrice.toFixed(1)}¢
                         </div>
-                        ${hasDiscount ? 
+                        ${discount ? 
                             `<div class="text-[10px] text-emerald-400 line-through">${originalPrice}¢</div>` : 
                             `<div class="text-[10px] text-zinc-500">${originalPrice}¢</div>`
                         }
@@ -431,17 +381,12 @@
             initMap();
             await loadFuelData();
 
-            // Load saved discounts from browser
             loadSavedDiscounts();
 
-            // Update brand dropdown when user moves or zooms the map
             map.on('moveend', updateDiscountUI);
             map.on('zoomend', updateDiscountUI);
-
-            // Populate the brand dropdown shortly after loading
             setTimeout(updateDiscountUI, 800);
 
-            // Initial ranked list update
             setTimeout(updateRankedList, 500);
         }
 
