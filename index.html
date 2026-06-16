@@ -255,8 +255,10 @@
             }
         }
 
-        function convertToCrypto(audPrice, currency) {
-            if (!audPrice || audPrice <= 0) return null;
+        function convertToCrypto(centPrice, currency) {
+            if (!centPrice || centPrice <= 0) return null;
+
+            const audPrice = centPrice / 100; // Convert cents to AUD
 
             if (currency === 'XDC' && cryptoPrices.XDC > 0) {
                 return (audPrice / cryptoPrices.XDC).toFixed(2);
