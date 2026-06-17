@@ -40,15 +40,6 @@
         @media (max-width: 768px) {
             .map-container { height: 380px !important; }
         }
-
-        /* Modal styling */
-        .modal {
-            animation: fadeInScale 0.2s ease-out forwards;
-        }
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200">
@@ -77,7 +68,7 @@
                     </a>
 
                     <!-- Install App Button -->
-                    <button id="installBtn"
+                    <button id="installBtn" 
                             class="hidden text-xs px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white transition-colors">
                         Install App
                     </button>
@@ -191,26 +182,30 @@
                 Built by <a href="https://xdcoutpost.xyz" target="_blank" class="hover:text-zinc-300 font-medium">XDC Outpost</a>
             </div>
             
-            <!-- Social Icons -->
+            <!-- Social Icons (X, GitHub, Telegram, Discord) -->
             <div class="flex justify-center gap-6 text-zinc-400">
+                
                 <!-- X -->
                 <a href="https://x.com/s4njk4n" target="_blank" class="hover:text-white transition-colors" aria-label="X">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M18.244 2.25l-7.451 8.502L4.5 2.25H1.5l7.5 8.5L1.5 21.75h3l6.75-7.5 6.75 7.5h3l-7.5-8.5 7.5-8.5h-3z"/>
                     </svg>
                 </a>
+
                 <!-- GitHub -->
                 <a href="https://github.com/s4njk4n" target="_blank" class="hover:text-white transition-colors" aria-label="GitHub">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                     </svg>
                 </a>
+
                 <!-- Telegram -->
                 <a href="https://t.me/s4njk4n" target="_blank" class="hover:text-white transition-colors" aria-label="Telegram">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                     </svg>
                 </a>
+
                 <!-- Discord -->
                 <a href="https://discord.com/users/852434672793288724" target="_blank" class="hover:text-white transition-colors" aria-label="Discord">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -222,103 +217,347 @@
 
     </div>
 
-    <!-- iOS Install Modal -->
-    <div id="iosModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-        <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-md w-full p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold">Install FuelSharp NSW</h3>
-                <button onclick="closeIOSModal()" class="text-zinc-400 hover:text-white text-2xl leading-none">&times;</button>
-            </div>
-            
-            <div class="space-y-4 text-sm text-zinc-300">
-                <p>To install this app on your iPhone or iPad:</p>
-                
-                <ol class="list-decimal list-inside space-y-2 pl-1">
-                    <li>Tap the <strong>Share</strong> button <span class="inline-block align-middle">⎋</span> at the bottom of Safari.</li>
-                    <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
-                    <li>Tap <strong>Add</strong> in the top right corner.</li>
-                </ol>
-                
-                <p class="text-xs text-zinc-500 mt-4">
-                    Once installed, the app will appear on your home screen with its own icon.
-                </p>
-            </div>
-            
-            <button onclick="closeIOSModal()" 
-                    class="mt-6 w-full bg-zinc-700 hover:bg-zinc-600 text-white py-3 rounded-2xl text-sm font-medium">
-                Got it
-            </button>
-        </div>
-    </div>
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // ==================== PWA INSTALL LOGIC ====================
+        // ==================== PWA INSTALL BUTTON ====================
         let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-        const iosModal = document.getElementById('iosModal');
 
-        // Detect iOS
-        function isIOS() {
-            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        }
-
-        // Check if already running as installed PWA
-        function isInStandaloneMode() {
-            return (window.matchMedia('(display-mode: standalone)').matches) || 
-                   (window.navigator.standalone === true);
-        }
-
-        // Show install button only if not already installed
-        if (!isInStandaloneMode()) {
-            installBtn.classList.remove('hidden');
-            installBtn.classList.add('inline-block');
-        }
-
-        // Android: beforeinstallprompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            const installBtn = document.getElementById('installBtn');
+            installBtn.classList.remove('hidden');
+            installBtn.classList.add('inline-block');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
             
-            // Show button if not iOS
-            if (!isIOS()) {
-                installBtn.classList.remove('hidden');
-                installBtn.classList.add('inline-block');
+            if (outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
             }
+            
+            deferredPrompt = null;
+            document.getElementById('installBtn').classList.add('hidden');
         });
 
-        // Button click handler
-        installBtn.addEventListener('click', async () => {
-            if (isIOS()) {
-                // Show iOS instructions modal
-                iosModal.classList.remove('hidden');
-                iosModal.classList.add('flex');
-            } else if (deferredPrompt) {
-                // Android native prompt
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                deferredPrompt = null;
-                installBtn.classList.add('hidden');
-            }
-        });
-
-        function closeIOSModal() {
-            iosModal.classList.remove('flex');
-            iosModal.classList.add('hidden');
-        }
-
-        // ==================== REST OF YOUR EXISTING SCRIPT ====================
-        // (Your existing code for map, data loading, discounts, etc. remains here)
-
+        // ==================== STATE ====================
         let allStations = [];
         let map;
         let markers = [];
         let savedDiscounts = [];
         let cryptoPrices = { XDC: 0, USDC: 0 };
 
-        // ... (keep all your existing functions: initMap, loadFuelData, refreshPrices, etc.)
+        // ==================== MAP ====================
+        function initMap() {
+            map = L.map('map', {
+                zoomControl: true,
+                attributionControl: false
+            }).setView([-33.8688, 151.2093], 10);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            map.on('moveend', updateRankedList);
+            map.on('zoomend', updateRankedList);
+        }
+
+        function addMarkers(stationsToShow) {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            stationsToShow.forEach(station => {
+                const marker = L.marker([station.lat, station.lng]).addTo(map);
+                markers.push(marker);
+            });
+        }
+
+        // ==================== DATA LOADING (Fixed Timestamp Logic) ====================
+        async function loadFuelData(forceRefresh = false) {
+            try {
+                let url = './data/fuel-prices.json';
+                
+                if (forceRefresh) {
+                    url += `?t=${Date.now()}`;
+                }
+
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Data file not found');
+
+                const data = await response.json();
+                const stationsData = data.stations || [];
+                const pricesData = data.prices || [];
+
+                const priceMap = {};
+                pricesData.forEach(p => {
+                    const code = p.stationcode || p.code || p.stationCode;
+                    if (!code) return;
+                    if (!priceMap[code]) priceMap[code] = {};
+                    const fuelType = p.fueltype || p.fuelType || p.type;
+                    const priceValue = parseFloat(p.price || p.Price);
+                    if (fuelType && priceValue) priceMap[code][fuelType] = priceValue;
+                });
+
+                allStations = stationsData
+                    .filter(s => s.location && s.location.latitude && s.location.longitude)
+                    .map((station, i) => {
+                        const prices = priceMap[station.code] || {};
+                        return {
+                            id: i + 1,
+                            brand: station.brand || 'Unknown',
+                            name: station.name || station.address || 'Station',
+                            lat: parseFloat(station.location.latitude),
+                            lng: parseFloat(station.location.longitude),
+                            prices: {
+                                U91: prices.U91 || prices['U91'] || 180,
+                                E10: prices.E10 || prices['E10'] || 177,
+                                Diesel: prices.Diesel || prices['Diesel'] || 195,
+                                P95: prices.P95 || prices['P95'] || 200,
+                                P98: prices.P98 || prices['P98'] || 210
+                            }
+                        };
+                    });
+
+                if (data.lastUpdated) {
+                    const date = new Date(data.lastUpdated);
+                    const timeString = date.toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                    document.getElementById('lastUpdated').textContent = `Updated: ${timeString}`;
+                } else {
+                    document.getElementById('lastUpdated').textContent = 'Data loaded';
+                }
+
+                const visibleStations = getVisibleStations();
+                addMarkers(visibleStations);
+                updateRankedList();
+
+            } catch (error) {
+                console.error('Failed to load fuel data:', error);
+                document.getElementById('lastUpdated').textContent = 'Using sample data';
+
+                allStations = [
+                    { id: 1, brand: "7-Eleven", name: "Sydney CBD", lat: -33.8688, lng: 151.2093, prices: { U91: 179.9, E10: 177.9, Diesel: 199.9, P95: 199.9, P98: 209.9 } },
+                    { id: 2, brand: "Shell", name: "Parramatta", lat: -33.8151, lng: 151.0034, prices: { U91: 181.9, E10: 179.9, Diesel: 195.9, P95: 201.9, P98: 211.9 } },
+                    { id: 3, brand: "BP", name: "Chatswood", lat: -33.7969, lng: 151.1833, prices: { U91: 178.9, E10: 176.9, Diesel: 194.9, P95: 198.9, P98: 208.9 } }
+                ];
+
+                const visibleStations = getVisibleStations();
+                addMarkers(visibleStations);
+                updateRankedList();
+            }
+        }
+
+        // ==================== REFRESH PRICES ====================
+        async function refreshPrices() {
+            const lastUpdatedEl = document.getElementById('lastUpdated');
+            lastUpdatedEl.textContent = 'Refreshing...';
+            
+            try {
+                await loadFuelData(true);
+            } catch (error) {
+                lastUpdatedEl.textContent = 'Failed to refresh';
+                setTimeout(() => {
+                    lastUpdatedEl.textContent = 'Updated: --:--';
+                }, 3000);
+            }
+        }
+
+        // ==================== CRYPTO PRICES ====================
+        async function loadCryptoPrices() {
+            try {
+                const bitrueRes = await fetch('https://openapi.bitrue.com/api/v1/ticker/price?symbol=XDCUSDT');
+                const bitrueData = await bitrueRes.json();
+                const xdcUsdt = parseFloat(bitrueData.price);
+
+                const geckoRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=aud');
+                const geckoData = await geckoRes.json();
+                const usdtAud = geckoData.tether?.aud || 1.52;
+
+                cryptoPrices.XDC = xdcUsdt * usdtAud;
+                cryptoPrices.USDC = usdtAud;
+
+                console.log('Live crypto prices loaded:', cryptoPrices);
+            } catch (e) {
+                console.warn('Failed to fetch live crypto prices. Using fallback.');
+                cryptoPrices.XDC = 0.045;
+                cryptoPrices.USDC = 1.52;
+            }
+        }
+
+        function convertToCrypto(centPrice, currency) {
+            if (!centPrice || centPrice <= 0) return null;
+            const audPrice = centPrice / 100;
+            if (currency === 'XDC' && cryptoPrices.XDC > 0) {
+                return (audPrice / cryptoPrices.XDC).toFixed(2);
+            }
+            if (currency === 'USDC' && cryptoPrices.USDC > 0) {
+                return (audPrice / cryptoPrices.USDC).toFixed(2);
+            }
+            return null;
+        }
+
+        // ==================== DISCOUNT MANAGEMENT ====================
+        function loadSavedDiscounts() {
+            const saved = localStorage.getItem('fuelDiscounts');
+            savedDiscounts = saved ? JSON.parse(saved) : [];
+            renderSavedDiscounts();
+        }
+
+        function saveDiscount() {
+            const brand = document.getElementById('discountBrand').value;
+            const amount = parseFloat(document.getElementById('discountAmount').value);
+            const label = document.getElementById('discountLabel').value.trim();
+
+            if (!brand || !amount || amount <= 0) {
+                alert("Please enter a valid discount amount.");
+                return;
+            }
+
+            savedDiscounts = savedDiscounts.filter(d => d.brand !== brand);
+            savedDiscounts.push({ brand, amount, label: label || brand });
+            localStorage.setItem('fuelDiscounts', JSON.stringify(savedDiscounts));
+            renderSavedDiscounts();
+            updateRankedList();
+        }
+
+        function deleteDiscount(brand) {
+            savedDiscounts = savedDiscounts.filter(d => d.brand !== brand);
+            localStorage.setItem('fuelDiscounts', JSON.stringify(savedDiscounts));
+            renderSavedDiscounts();
+            updateRankedList();
+        }
+
+        function renderSavedDiscounts() {
+            const container = document.getElementById('savedDiscountsList');
+            container.innerHTML = '';
+
+            if (savedDiscounts.length === 0) {
+                container.innerHTML = `<div class="text-xs text-zinc-500 px-2">No discounts saved yet.</div>`;
+                return;
+            }
+
+            savedDiscounts.forEach(discount => {
+                const div = document.createElement('div');
+                div.className = `flex justify-between items-center bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-2 text-sm`;
+                div.innerHTML = `
+                    <div>
+                        <span class="font-medium">${discount.brand}</span>
+                        <span class="text-emerald-400 ml-2">−${discount.amount}¢</span>
+                        ${discount.label !== discount.brand ? `<span class="text-xs text-zinc-400 ml-2">(${discount.label})</span>` : ''}
+                    </div>
+                    <button onclick="deleteDiscount('${discount.brand}')" class="text-red-400 hover:text-red-500 text-xs px-3 py-1">Remove</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function getDiscountForBrand(brand) {
+            return savedDiscounts.find(d => d.brand === brand);
+        }
+
+        function getEffectivePrice(station, fuelType) {
+            const basePrice = station.prices[fuelType] || 180;
+            const discount = getDiscountForBrand(station.brand);
+            return discount ? Math.max(basePrice - discount.amount, 0) : basePrice;
+        }
+
+        // ==================== DYNAMIC BRAND DROPDOWN ====================
+        function populateBrandDropdown() {
+            const select = document.getElementById('discountBrand');
+            const visibleStations = getVisibleStations();
+            const brands = [...new Set(visibleStations.map(s => s.brand))].sort();
+
+            select.innerHTML = '<option value="">Select brand...</option>';
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                select.appendChild(option);
+            });
+        }
+
+        function updateDiscountUI() {
+            populateBrandDropdown();
+        }
+
+        // ==================== VISIBLE STATIONS ====================
+        function getVisibleStations() {
+            if (!map) return allStations;
+            const bounds = map.getBounds();
+            return allStations.filter(station => bounds.contains([station.lat, station.lng]));
+        }
+
+        // ==================== RANKED LIST ====================
+        function updateRankedList() {
+            const container = document.getElementById('rankedList');
+            const fuelType = document.getElementById('fuelType').value;
+            const displayCurrency = document.getElementById('displayCurrency').value;
+            const visibleStations = getVisibleStations();
+
+            document.getElementById('visibleCount').textContent = `${visibleStations.length} stations visible`;
+
+            if (visibleStations.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-zinc-400">No stations visible in current map area.</div>`;
+                return;
+            }
+
+            const sorted = [...visibleStations].sort((a, b) => {
+                return getEffectivePrice(a, fuelType) - getEffectivePrice(b, fuelType);
+            });
+
+            container.innerHTML = '';
+
+            sorted.slice(0, 20).forEach((station, index) => {
+                const effectiveAUD = getEffectivePrice(station, fuelType);
+                const originalAUD = station.prices[fuelType];
+                const discount = getDiscountForBrand(station.brand);
+                const cryptoValue = convertToCrypto(effectiveAUD, displayCurrency);
+
+                const div = document.createElement('div');
+                div.className = `station-row px-5 py-4 flex justify-between items-center border-b border-zinc-800 last:border-b-0 cursor-pointer`;
+
+                let priceHTML = `
+                    <div class="font-mono font-semibold ${discount ? 'text-emerald-400' : 'text-white'}">
+                        ${effectiveAUD.toFixed(1)}¢ <span class="text-xs text-zinc-400">AUD</span>
+                    </div>
+                `;
+
+                if (cryptoValue && displayCurrency !== 'AUD') {
+                    priceHTML += `
+                        <div class="text-emerald-400 text-xs mt-0.5">
+                            ≈ ${cryptoValue} ${displayCurrency}
+                        </div>
+                    `;
+                }
+
+                if (discount) {
+                    priceHTML += `<div class="text-[10px] text-emerald-400 line-through">${originalAUD}¢ AUD</div>`;
+                }
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 text-center text-xs font-mono text-zinc-500">${index + 1}</div>
+                        <div>
+                            <div class="font-medium">${station.brand}</div>
+                            <div class="text-xs text-zinc-400">${station.name}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">${priceHTML}</div>
+                `;
+
+                div.onclick = () => {
+                    map.flyTo([station.lat, station.lng], 15, { duration: 0.8 });
+                };
+
+                container.appendChild(div);
+            });
+        }
 
         // ==================== INITIALIZATION ====================
         async function initializeApp() {
@@ -331,6 +570,7 @@
             map.on('moveend', updateDiscountUI);
             map.on('zoomend', updateDiscountUI);
             setTimeout(updateDiscountUI, 800);
+
             setTimeout(updateRankedList, 500);
         }
 
