@@ -343,9 +343,23 @@
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-            // Save map position when user moves or zooms
+            // Save map position
             map.on('moveend', saveMapState);
             map.on('zoomend', saveMapState);
+
+            // === NEW: Auto-refresh data when map is moved or zoomed ===
+            let refreshTimeout;
+            const refreshOnMapChange = () => {
+                clearTimeout(refreshTimeout);
+                refreshTimeout = setTimeout(() => {
+                    refreshPrices();           // Same as clicking "Refresh Prices" button
+                }, 1500); // 1.5 second debounce
+            };
+
+            map.on('moveend', refreshOnMapChange);
+            map.on('zoomend', refreshOnMapChange);
+
+            // Existing listeners for updating the list
             map.on('moveend', updateRankedList);
             map.on('zoomend', updateRankedList);
         }
