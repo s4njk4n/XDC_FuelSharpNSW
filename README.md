@@ -24,25 +24,25 @@ It’s designed to be simple and useful for everyday drivers.
    Go to: [https://s4njk4n.github.io/XDC_FuelSharpNSW/](https://s4njk4n.github.io/XDC_FuelSharpNSW/)
 
 2. **Choose your fuel type**  
-   Select U91, E10, Diesel, P95, or P98 at the top.
+   Tap U91, E10, P95, P98, Diesel, Premium Diesel, LPG or E85 at the top.
 
 3. **Look at the map**  
-   The map shows petrol stations in your current view. Zoom and move around to see different areas.
+   Tap the locate button (◎) to jump to where you are, or drag/zoom yourself. Pins show the price in ¢/L and are coloured green → amber → red from cheapest to dearest on screen. Tap a pin for all of that station's prices and a Directions link.
 
 4. **Check the ranked list**  
-   Below the map, you’ll see the cheapest stations currently visible on the map (sorted from cheapest to most expensive).
+   Next to (or below) the map you’ll see every station in the map area ranked by your effective price, plus a summary of the cheapest price, the typical price and what you save on a full tank. After using locate, you can also sort by distance.
 
 5. **Add your discounts** (optional but useful)
    - Scroll down to **"Your Discounts"**
-   - Select a brand (e.g. United, Ampol, Shell, etc.) - Only service station brands visible on the map are shown in the dropdown list
+   - Select a brand (e.g. United, Ampol, Shell, etc.) — brands on the map right now are listed first
    - Enter how many cents per litre cheaper you get
    - Add a note (e.g. “NRMA”, “Work card”, “Woolies”)
-   - Click **Save Discount**
+   - Click **Save discount**
 
    Once saved, your discounted price will automatically appear in the list.
 
 6. **View prices in XDC or USDC** (optional)
-   At the bottom, use the **"Display Prices In"** dropdown to switch between:
+   Use the **AUD / XDC / USDC** switch at the top to change between:
    - AUD (normal dollars)
    - XDC
    - USDC (on the XDC Network)
