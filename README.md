@@ -21,7 +21,7 @@ It’s designed to be simple and useful for everyday drivers.
 ## How to Use It
 
 1. **Open the site**  
-   Go to: [https://s4njk4n.github.io/XDC_FuelSharpNSW/](https://s4njk4n.github.io/XDC_FuelSharpNSW/)
+   Go to: [https://xdcoutpost.xyz/XDC_FuelSharpNSW/](https://xdcoutpost.xyz/XDC_FuelSharpNSW/)
 
 2. **Choose your fuel type**  
    Tap U91, E10, P95, P98, Diesel, Premium Diesel, LPG or E85 at the top.
@@ -42,8 +42,8 @@ It’s designed to be simple and useful for everyday drivers.
    Once saved, your discounted price will automatically appear in the list.
 
 6. **View prices in XDC or USDC** (optional)
-   Use the **AUD / XDC / USDC** switch at the top to change between:
-   - AUD (normal dollars)
+   Use the **AUDD / XDC / USDC** switch at the top to change between:
+   - AUDD (the Australian Digital Dollar stablecoin on XDC Network, 1:1 with AUD, so the same as the pump price)
    - XDC
    - USDC (on the XDC Network)
 

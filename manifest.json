@@ -1,17 +1,36 @@
 {
   "name": "FuelSharp NSW",
   "short_name": "FuelSharp",
-  "description": "Live NSW fuel prices with your personal discounts. Powered by XDC Network.",
+  "description": "The cheapest fuel near you in NSW, with your discounts applied. Prices in AUDD, XDC or USDC. By XDC Outpost.",
   "id": "/XDC_FuelSharpNSW/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#09090b",
-  "categories": ["travel", "utilities", "finance"],
+  "background_color": "#1E1A4A",
+  "theme_color": "#1E1A4A",
+  "categories": [
+    "travel",
+    "utilities",
+    "finance"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

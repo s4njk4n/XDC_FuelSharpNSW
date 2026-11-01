@@ -2,14 +2,12 @@
 // - App shell: network-first, falling back to cache (so updates ship immediately but the app still opens offline)
 // - Price data: network-first, falling back to the last cached copy (the page shows a "stale" banner from its timestamp)
 // - Map tiles and third-party APIs are not cached here.
-const CACHE = 'fuelsharp-v2';
+const CACHE = 'fuelsharp-v3';
 const SHELL = [
     './',
     './index.html',
-    './instructions.html',
     './manifest.json',
     './icons/icon-192.png',
-    './icons/xdc-logo-white.png',
 ];
 
 self.addEventListener('install', event => {
@@ -29,6 +27,8 @@ self.addEventListener('fetch', event => {
     if (req.method !== 'GET') return;
     const url = new URL(req.url);
     if (url.origin !== self.location.origin) return;   // let the browser handle CDNs, tiles, APIs
+    // Same-origin requests outside this app (the shared /assets/ fonts, analytics) are cached too, so the
+    // page keeps its look offline. GoatCounter's count endpoint is cross-origin and never touched.
 
     event.respondWith(
         fetch(req)

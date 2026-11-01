@@ -1,78 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#09090b">
-    <title>How to use · FuelSharp NSW</title>
-    <link rel="icon" type="image/png" href="icons/icon-192.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap">
-    <style>
-        :root { --bg:#09090b; --panel:#18181b; --line:#27272a; --text:#e4e4e7; --muted:#a1a1aa; --dim:#71717a; --accent:#22d3ee; --cheap:#34d399; }
-        * { box-sizing: border-box; }
-        body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 'Inter', system-ui, sans-serif; }
-        main { max-width: 760px; margin: 0 auto; padding: 24px 18px 40px; }
-        a { color: var(--accent); }
-        .top { display:flex; align-items:center; gap:12px; margin-bottom:28px; text-decoration:none; color:inherit; }
-        .top img { height:30px; }
-        .top h1 { margin:0; font:700 26px/1 'Space Grotesk', sans-serif; letter-spacing:-.02em; }
-        .top h1 span { color: var(--accent); }
-        .top p { margin:3px 0 0; font-size:12px; color:var(--muted); }
-        h2 { font-size:22px; margin:0 0 8px; }
-        h3 { font-size:18px; margin:32px 0 12px; }
-        p, li { color: var(--muted); }
-        strong { color: var(--text); }
-        ol.steps { list-style:none; padding:0; margin:0; counter-reset:s; display:grid; gap:14px; }
-        ol.steps li { counter-increment:s; display:grid; grid-template-columns:30px 1fr; gap:12px; }
-        ol.steps li::before { content:counter(s); width:28px; height:28px; border-radius:50%; background:var(--panel); border:1px solid var(--line); display:grid; place-items:center; font-size:13px; font-weight:600; color:var(--text); }
-        ol.steps b { display:block; color:var(--text); font-weight:600; }
-        .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:18px 20px; }
-        .legend i { display:inline-block; width:10px; height:10px; border-radius:50%; margin:0 4px 0 10px; vertical-align:middle; }
-        .back { display:inline-block; margin-top:32px; padding:10px 18px; border-radius:12px; background:var(--accent); color:#052e33; text-decoration:none; font-weight:600; }
-        footer { margin-top:40px; padding-top:18px; border-top:1px solid var(--line); text-align:center; font-size:12px; color:var(--dim); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How FuelSharp works | XDC Outpost</title>
+  <link rel="canonical" href="https://xdcoutpost.xyz/XDC_FuelSharpNSW/#know">
+  <meta http-equiv="refresh" content="0; url=./#know">
+  <meta name="theme-color" content="#1E1A4A">
+  <style>body{margin:0;background:#1E1A4A;color:#F2EDFF;font:1.05rem/1.6 "Helvetica Neue","Segoe UI",sans-serif;display:grid;place-items:center;min-height:100vh}a{color:#8FDCFF}</style>
 </head>
 <body>
-<main>
-    <a class="top" href="./">
-        <img src="icons/xdc-logo-white.png" alt="XDC Network" width="67" height="30">
-        <div><h1>Fuel<span>Sharp</span></h1><p>How to use</p></div>
-    </a>
-
-    <h2>Find the cheapest fuel near you — at the price <em>you</em> pay</h2>
-    <p>FuelSharp shows live fuel prices from the NSW Government’s FuelCheck data, applies your own discounts (NRMA, shopper dockets, fuel cards…), and can show the cost in XDC or USDC.</p>
-
-    <h3>Quick start</h3>
-    <ol class="steps">
-        <li><div><b>Pick your fuel</b>Tap a fuel type at the top: U91, E10, P95, P98, Diesel, Premium Diesel, LPG or E85.</div></li>
-        <li><div><b>Find your area</b>Tap the <strong>locate</strong> button (◎) on the map to jump to where you are, or drag and zoom the map yourself.</div></li>
-        <li><div><b>Read the map</b>Each pin shows the price in cents per litre.
-            <span class="legend"><i style="background:#34d399"></i>cheapest third <i style="background:#fbbf24"></i>middle <i style="background:#f87171"></i>dearest third</span> of what’s on screen. When you’re zoomed far out, pins become coloured dots — zoom in to see prices.</div></li>
-        <li><div><b>Check the list</b>The list ranks every station in the map area. Tap a row to fly to it; tap a pin for all its prices and a <strong>Directions</strong> link. Once you’ve used the locate button you can sort by <strong>Distance</strong> too.</div></li>
-        <li><div><b>Add your discounts</b>Under <strong>Your discounts</strong>, choose a brand, enter the cents-per-litre off, and save. Discounted prices turn green and the ranking updates. Note some chains appear under several brand names (e.g. <em>Ampol</em>, <em>EG Ampol</em>, <em>Ampol Foodary</em>) — add each one you can use.</div></li>
-        <li><div><b>See your savings</b>The summary shows the cheapest price in view, the typical (median) price, and how much you save on a full tank. Set your tank size under <strong>Settings</strong>.</div></li>
-    </ol>
-
-    <h3>Paying with crypto?</h3>
-    <p>Switch <strong>AUD / XDC / USDC</strong> at the top right to see each price converted at the current market rate (shown under Settings). Handy if you use a card that spends XDC or stablecoins.</p>
-
-    <h3>Install it like an app</h3>
-    <p>On Android/Chrome tap <strong>Install app</strong>. On iPhone, tap <strong>Share → Add to Home Screen</strong> in Safari.</p>
-
-    <h3>Where the data comes from</h3>
-    <div class="card">
-        <p style="margin-top:0">Prices come from the <strong>NSW Government FuelCheck</strong> API and are refreshed regularly. The status pill at the top shows when they were last updated, and a warning appears if they’re getting old. Each station also shows when its price was last reported.</p>
-        <p style="margin-bottom:0">Your discounts and settings are stored only in your browser — nothing is sent anywhere. Always confirm the price at the pump.</p>
-    </div>
-
-    <h3>About XDC Network</h3>
-    <p><a href="https://xdc.org" target="_blank" rel="noopener">XDC Network</a> is a fast, low-cost blockchain built for real-world payments. Showing fuel prices in XDC and USDC makes it easy for crypto-card users to see what a fill-up really costs.</p>
-
-    <a class="back" href="./">← Back to FuelSharp</a>
-
-    <footer>Built by <a href="https://xdcoutpost.xyz" target="_blank" rel="noopener">XDC Outpost</a></footer>
-</main>
+  <p>The instructions are now on the main page: <a href="./#know">How FuelSharp works</a>.</p>
 </body>
 </html>
