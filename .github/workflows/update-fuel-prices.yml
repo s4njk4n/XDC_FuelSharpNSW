@@ -2,31 +2,32 @@ name: Update NSW Fuel Prices
 
 on:
   schedule:
-    - cron: '0 * * * *'     # Every hour (UTC)
+    - cron: '7 * * * *'     # Hourly (UTC). Off the :00 mark, where GitHub's scheduler is busiest and often delays/drops runs.
   workflow_dispatch:        # Manual trigger
 
 permissions:
   contents: write
 
+# Never let two runs race each other pushing to main
+concurrency:
+  group: update-fuel-prices
+  cancel-in-progress: false
+
 jobs:
   update-prices:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          ref: main
+          fetch-depth: 1      # full history isn't needed (the repo has hundreds of data commits)
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      # Reset to latest first, then run the script
-      - name: Sync with latest changes
-        run: |
-          git fetch origin
-          git reset --hard origin/main
 
       - name: Fetch and save fuel prices
         env:
@@ -38,12 +39,15 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
           git add data/fuel-prices.json
-
           if git diff --staged --quiet; then
             echo "No changes to commit"
-          else
-            git commit -m "Update fuel prices [$(date)]"
-            git push origin main
+            exit 0
           fi
+          git commit -m "Update fuel prices [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          # If someone pushed in the meantime, rebase our data commit on top and retry
+          for i in 1 2 3; do
+            git push origin HEAD:main && exit 0
+            git pull --rebase origin main
+          done
+          exit 1
