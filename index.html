@@ -749,12 +749,13 @@ function priceInfo(st, fuel = state.fuel) {
     const eff = d ? Math.max(entry.p - d.amount, 0) : entry.p;
     return { base: entry.p, eff, t: entry.t, discount: d };
 }
+// Secondary price line under the ¢/L figure. AUDD is 1:1 with AUD, so it's an
+// exact restatement ("="); XDC/USDC are market conversions ("≈").
 function inCurrency(cents) {
-    if (state.currency === 'AUD' || !state.rates) return null;
-    const rate = state.rates[state.currency];
-    if (!rate) return null;
+    const rate = state.currency !== 'AUD' && state.rates && state.rates[state.currency];
+    if (!rate) return `= ${(cents / 100).toFixed(3)} AUDD/L`;
     const v = (cents / 100) / rate;
-    return `${v.toFixed(v >= 100 ? 0 : 2)} ${state.currency}/L`;
+    return `≈ ${v.toFixed(v >= 100 ? 0 : 2)} ${state.currency}/L`;
 }
 
 // ===================================================================
@@ -903,6 +904,7 @@ function popupHtml(st) {
         <div class="pop-brand">${esc(st.brand)}</div>
         <div class="pop-name">${esc(st.name)}<br>${esc(st.address)}</div>
         <table class="pop-table">${rows || '<tr><td>No prices reported</td><td></td></tr>'}</table>
+        ${pi ? `<div class="pop-age">${esc(FUEL_BY_CODE[state.fuel].long)} ${esc(inCurrency(pi.eff))}</div>` : ''}
         ${d ? `<div class="pop-age" style="color:var(--ok)">Includes your ${esc(d.label || d.brand)} discount (−${d.amount}¢)</div>` : ''}
         ${pi && pi.t ? `<div class="pop-age">${esc(FUEL_BY_CODE[state.fuel].long)} price reported ${ago(pi.t)}</div>` : ''}
         <div class="pop-actions"><a href="${dir}" target="_blank" rel="noopener">Directions ↗</a></div>`;
@@ -993,7 +995,7 @@ function renderList(items, sortedPrices) {
             <span class="price">
                 <span class="p${pi.discount ? ' disc' : ''}">${pi.eff.toFixed(1)}<span class="u">¢/L</span></span>
                 ${pi.discount ? `<div class="was">${pi.base.toFixed(1)}¢</div>` : ''}
-                ${alt ? `<div class="alt">≈ ${esc(alt)}</div>` : ''}
+                <div class="alt">${esc(alt)}</div>
             </span>
         </button></li>`;
     }).join('');
