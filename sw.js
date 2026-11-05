@@ -2,7 +2,7 @@
 // - App shell: network-first, falling back to cache (so updates ship immediately but the app still opens offline)
 // - Price data: network-first, falling back to the last cached copy (the page shows a "stale" banner from its timestamp)
 // - Map tiles and third-party APIs are not cached here.
-const CACHE = 'fuelsharp-v3';
+const CACHE = 'fuelsharp-v4';
 const SHELL = [
     './',
     './index.html',
