@@ -2,12 +2,12 @@
 // - App shell: network-first, falling back to cache (so updates ship immediately but the app still opens offline)
 // - Price data: network-first, falling back to the last cached copy (the page shows a "stale" banner from its timestamp)
 // - Map tiles and third-party APIs are not cached here.
-const CACHE = 'fuelsharp-v4';
+const CACHE = 'fuelsharp-v5';
 const SHELL = [
     './',
     './index.html',
     './manifest.json',
-    './icons/icon-192.png',
+    './icons/icon-192.png?v=2',
 ];
 
 self.addEventListener('install', event => {
